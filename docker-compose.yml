@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  playwright-load-test:
+    build:
+      context: .
+      args:
+        REPO_URL: https://github.com/Shuttle-Labs/genius-e2e-load-testing.git
+        BRANCH: dev
+    environment:
+      - BASE_URL=${BASE_URL}
+      - SEED_PHRASE=${SEED_PHRASE}
+      - METAMASK_PASSWORD=${METAMASK_PASSWORD}
+    volumes:
+      # Mount reports/videos/traces to host for debugging
+      - ./playwright-results:/app/playwright/test-results
+      - ./playwright-report:/app/playwright/playwright-report
+    shm_size: '2gb'  # Increase shared memory for Chrome
+    # Uncomment below to run multiple instances for load testing
+    # deploy:
+    #   replicas: 5

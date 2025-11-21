@@ -1,0 +1,50 @@
+# Alternative Dockerfile - Builds Synpress cache at runtime
+# Use this if you encounter issues with build-time cache generation
+
+FROM mcr.microsoft.com/playwright:v1.48.2-jammy
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Clone repository
+ARG REPO_URL
+ARG BRANCH=main
+RUN git clone ${REPO_URL} . && \
+    git checkout ${BRANCH}
+
+# Install npm dependencies
+RUN npm ci
+
+# Install Playwright browsers (this works fine at build time)
+RUN cd playwright && npx playwright install --with-deps
+
+# Environment variables
+ENV BASE_URL="https://staging.tradegenius.com"
+ENV SEED_PHRASE="brick jeans notice danger fatigue judge turtle retire miss hold office sauce"
+ENV METAMASK_PASSWORD="Tester@1234"
+
+# Create entrypoint script that builds cache and runs tests
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+echo "================================="\n\
+echo "Building Synpress MetaMask cache..."\n\
+echo "================================="\n\
+cd /app/playwright\n\
+npx synpress test/wallet-setup\n\
+\n\
+echo ""\n\
+echo "================================="\n\
+echo "Starting Playwright tests..."\n\
+echo "================================="\n\
+cd /app/playwright\n\
+npx playwright test\n\
+' > /entrypoint.sh && chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
