@@ -63,6 +63,12 @@ ENV METAMASK_PASSWORD="Tester@1234"
 # Build Synpress cache with the fixed file using xvfb for headless display
 RUN cd playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx synpress test/wallet-setup
 
+RUN echo "✓ Synpress cache built successfully with fixed files"
+
+RUN cd playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24"  npx playwright test --headed --workers 1
+
+RUN echo "✓ Playwright tests ran successfully with fixed files"
+
 # Create entrypoint script
 RUN printf '#!/bin/bash\n\
 set -e\n\

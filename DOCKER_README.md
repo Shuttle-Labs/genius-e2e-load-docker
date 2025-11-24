@@ -306,3 +306,5 @@ export DISPLAY=:99
 sleep 2
 cd /app/playwright
 npx playwright test --headed --workers=1 --reporter=line
+
+docker builder prune -a -f
