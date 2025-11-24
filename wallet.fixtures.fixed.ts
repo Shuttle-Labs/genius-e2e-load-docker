@@ -39,8 +39,11 @@ const test = base.extend<Fixtures>({
         await dappLogin.chooseMetaMask(dapp);
 
         await metamask.connectToDapp();
-        await handleMetaMaskSignature(context);
-        await handleMetaMaskSignature(context);
+        // await handleMetaMaskSignature(context);
+        // await handleMetaMaskSignature(context);
+        await metamask.confirmSignature();
+        await page.waitForTimeout(5000);
+        await metamask.confirmSignature();
         await dappLogin.skip2FA(dapp);
         await dappLogin.verifyLoggedIn(dapp);
 

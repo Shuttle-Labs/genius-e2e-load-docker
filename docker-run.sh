@@ -12,7 +12,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 REPO_URL="https://github.com/Shuttle-Labs/genius-e2e-load-testing.git"
-BRANCH="satyam"
+BRANCH="satyam2"
 IMAGE_NAME="playwright-load-test"
 DOCKERFILE="Dockerfile.fixed"
 

@@ -74,7 +74,7 @@ echo "BASE_URL: ${BASE_URL}"\n\
 echo ""\n\
 \n\
 cd /app/playwright\n\
-exec npx playwright test "$@"\n\
+exec npx playwright test --headed --workers 1 "$@"\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

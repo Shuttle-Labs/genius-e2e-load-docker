@@ -286,3 +286,23 @@ For issues related to:
 - Playwright: https://playwright.dev/docs/intro
 - Synpress: https://github.com/Synthetixio/synpress
 - Docker: https://docs.docker.com/
+
+
+docker build --no-cache \
+  --build-arg REPO_URL=https://github.com/Shuttle-Labs/genius-e2e-load-testing.git \
+  --build-arg BRANCH=satyam2 \
+  -f Dockerfile.fixed \
+  -t playwright-load-test:latest \
+  .
+
+docker run --rm -it \
+  --shm-size=2g \
+  --env-file .env \
+  --entrypoint /bin/bash \
+  playwright-load-test:latest
+
+  Xvfb :99 -screen 0 1280x960x24 &
+export DISPLAY=:99
+sleep 2
+cd /app/playwright
+npx playwright test --headed --workers=1 --reporter=line
