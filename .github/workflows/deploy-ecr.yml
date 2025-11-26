@@ -9,6 +9,8 @@ on:
 env:
   ECR_REPOSITORY_URI: 445914872260.dkr.ecr.us-east-2.amazonaws.com/e2e_load_test
   IMAGE_NAME: playwright-load-test
+  E2E_REPO_URL: https://github.com/Shuttle-Labs/genius-e2e-load-testing.git
+  E2E_REPO_BRANCH: main
 
 jobs:
   build-and-push:
@@ -34,6 +36,8 @@ jobs:
           IMAGE_URI: ${{ env.ECR_REPOSITORY_URI }}:latest
         run: |
           docker build \
+            --build-arg REPO_URL="${{ env.E2E_REPO_URL }}" \
+            --build-arg BRANCH="${{ env.E2E_REPO_BRANCH }}" \
             -f Dockerfile.fixed \
             -t "$IMAGE_URI" \
             .
