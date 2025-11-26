@@ -67,17 +67,17 @@ docker build \
 ./docker-run.sh run
 ```
 
-#### Option B: Using Docker Compose
-
-```bash
-docker-compose up
-```
-
-#### Option C: Multiple Instances for Load Testing
+#### Option B: Multiple Instances via Helper Script
 
 ```bash
 # Run 10 parallel instances
-./docker-run.sh scale 10
+./docker-run.sh run 10
+```
+
+#### Option C: Using Docker Compose
+
+```bash
+docker-compose up
 ```
 
 ## Detailed Usage
@@ -116,11 +116,16 @@ Results will be saved to timestamped folders (for example `./playwright-results/
 
 For load testing, you can run multiple containers simultaneously:
 
-```bash
-# Using the helper script (easier)
-./docker-run.sh scale 50
+Use the helper to scale up quickly:
 
-# Or manually
+```bash
+# Run 50 parallel instances
+./docker-run.sh run 50
+```
+
+Or launch them manually:
+
+```bash
 for i in {1..50}; do
   docker run --rm -d \
     --name playwright-test-$i \
@@ -314,8 +319,3 @@ cd /app/playwright
 npx playwright test --headed --workers=1 --reporter=line
 
 docker builder prune -a -f
-
-#hussain
-
-build: ./docker-run.sh build
-Run: ./docker-run.sh run

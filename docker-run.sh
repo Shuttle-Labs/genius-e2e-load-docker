@@ -24,6 +24,14 @@ fi
 
 echo -e "${GREEN}=== Playwright Load Testing Docker Setup ===${NC}\n"
 
+# Ensure image exists (build if missing)
+ensure_image() {
+    if ! docker image inspect ${IMAGE_NAME}:latest >/dev/null 2>&1; then
+        echo -e "${YELLOW}Image ${IMAGE_NAME}:latest not found. Building now...${NC}"
+        build_image
+    fi
+}
+
 # Check if .env exists
 if [ ! -f .env ]; then
     echo -e "${YELLOW}Warning: .env file not found!${NC}"
@@ -52,50 +60,72 @@ build_image() {
     echo -e "${GREEN}✓ Image built successfully${NC}\n"
 }
 
-# Function to run single instance
-run_single() {
-    echo -e "${GREEN}Running single test instance...${NC}"
-    local timestamp
-    timestamp=$(date +"%Y%m%d-%H%M%S")
-    local host_results_dir="$(pwd)/playwright-results/${timestamp}"
-    local host_report_dir="$(pwd)/playwright-report/${timestamp}"
-    mkdir -p "${host_results_dir}" "${host_report_dir}"
-    echo "Artifacts will be saved under:"
-    echo "  Results:     ${host_results_dir}"
-    echo "  HTML report: ${host_report_dir}"
-    docker run --rm "${TTY_ARGS[@]}" \
-        --shm-size=2g \
-        --env-file .env \
-        -v "${host_results_dir}:/app/playwright/test-results" \
-        -v "${host_report_dir}:/app/playwright/playwright-report" \
-        --entrypoint /bin/bash \
-        ${IMAGE_NAME}:latest \
-        -lc "${PLAYWRIGHT_CMD}"
+# Function to run instances (single or multiple)
+run_instances() {
+    local instances=${1:-1}
+    ensure_image
+    echo -e "${GREEN}Running ${instances} instance(s)...${NC}"
+    local run_timestamp
+    run_timestamp=$(date +"%Y%m%d-%H%M%S")
+    local results_root="$(pwd)/playwright-results/${run_timestamp}"
+    local report_root="$(pwd)/playwright-report/${run_timestamp}"
+    mkdir -p "${results_root}" "${report_root}"
+
+    if [ "$instances" -le 1 ]; then
+        local host_results_dir="${results_root}"
+        local host_report_dir="${report_root}"
+        echo "Artifacts will be saved under:"
+        echo "  Results:     ${host_results_dir}"
+        echo "  HTML report: ${host_report_dir}"
+        docker run --rm "${TTY_ARGS[@]}" \
+            --shm-size=2g \
+            --env-file .env \
+            -v "${host_results_dir}:/app/playwright/test-results" \
+            -v "${host_report_dir}:/app/playwright/playwright-report" \
+            --entrypoint /bin/bash \
+            ${IMAGE_NAME}:latest \
+            -lc "${PLAYWRIGHT_CMD}"
+    else
+        echo "Artifacts root:"
+        echo "  Results:     ${results_root}"
+        echo "  HTML report: ${report_root}"
+        echo "Logs from parallel instances will stream below."
+        local pids=()
+        local exit_code=0
+        for i in $(seq 1 $instances); do
+            echo -e "${YELLOW}Starting instance $i...${NC}"
+            local inst_results_dir="${results_root}/instance-$i"
+            local inst_report_dir="${report_root}/instance-$i"
+            mkdir -p "${inst_results_dir}" "${inst_report_dir}"
+            docker run --rm \
+                --name playwright-test-$i \
+                --shm-size=2g \
+                --env-file .env \
+                -v "${inst_results_dir}:/app/playwright/test-results" \
+                -v "${inst_report_dir}:/app/playwright/playwright-report" \
+                --entrypoint /bin/bash \
+                ${IMAGE_NAME}:latest \
+                -lc "${PLAYWRIGHT_CMD}" &
+            pids+=($!)
+            sleep 0.5
+        done
+        for pid in "${pids[@]}"; do
+            if ! wait "$pid"; then
+                exit_code=1
+            fi
+        done
+        if [ "$exit_code" -ne 0 ]; then
+            echo -e "${RED}One or more instances failed${NC}"
+            exit "$exit_code"
+        fi
+        echo -e "${GREEN}✓ All instances completed${NC}"
+    fi
 }
 
 # Function to run using docker-compose
 run_compose() {
     echo -e "${GREEN}Running with docker-compose...${NC}"
     docker-compose up --build
-}
-
-# Function to run multiple instances
-run_multiple() {
-    local instances=$1
-    echo -e "${GREEN}Running ${instances} parallel test instances...${NC}"
-    
-        for i in $(seq 1 $instances); do
-            echo -e "${YELLOW}Starting instance $i...${NC}"
-            docker run --rm -d \
-                --name playwright-test-$i \
-                --shm-size=2g \
-                --env-file .env \
-                ${IMAGE_NAME}:latest \
-                "${PLAYWRIGHT_CMD[@]}" &
-        done
-    
-    wait
-    echo -e "${GREEN}✓ All instances completed${NC}"
 }
 
 # Function to clean up
@@ -112,37 +142,32 @@ case "${1:-}" in
         build_image
         ;;
     run)
-        run_single
+        count=${2:-1}
+        if ! [[ "$count" =~ ^[0-9]+$ ]] || [ "$count" -lt 1 ]; then
+            echo -e "${RED}Error: Run count must be a positive integer${NC}"
+            exit 1
+        fi
+        run_instances "$count"
         ;;
     compose)
         run_compose
-        ;;
-    scale)
-        if [ -z "$2" ]; then
-            echo -e "${RED}Error: Please specify number of instances${NC}"
-            echo "Usage: $0 scale <number>"
-            exit 1
-        fi
-        build_image
-        run_multiple $2
         ;;
     clean)
         cleanup
         ;;
     *)
-        echo "Usage: $0 {build|run|compose|scale|clean}"
+        echo "Usage: $0 {build|run|compose|clean}"
         echo ""
         echo "Commands:"
-        echo "  build   - Build the Docker image"
-        echo "  run     - Run a single test instance"
-        echo "  compose - Run using docker-compose"
-        echo "  scale N - Run N parallel instances"
-        echo "  clean   - Clean up containers and images"
+        echo "  build    - Build the Docker image"
+        echo "  run [N]  - Run once (default) or N parallel instances"
+        echo "  compose  - Run using docker-compose"
+        echo "  clean    - Clean up containers and images"
         echo ""
         echo "Examples:"
-        echo "  $0 build          # Build the image"
-        echo "  $0 run            # Run single instance"
-        echo "  $0 scale 10       # Run 10 parallel instances"
+        echo "  $0 build      # Build the image"
+        echo "  $0 run        # Run single instance"
+        echo "  $0 run 5      # Run 5 parallel instances"
         exit 1
         ;;
 esac
