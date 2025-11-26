@@ -1,0 +1,24 @@
+{
+  "family": "e2e-load-test",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "2048",
+  "memory": "4096",
+  "taskRoleArn": "arn:aws:iam::445914872260:role/genius_ECSExec_Role",
+  "executionRoleArn": "arn:aws:iam::445914872260:role/genius_ECSExec_Role",
+  "containerDefinitions": [
+    {
+      "name": "playwright-load",
+      "image": "445914872260.dkr.ecr.us-east-2.amazonaws.com/e2e_load_test:latest",
+      "entryPoint": ["npm", "run", "start"],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/e2e-load-test",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "playwright"
+        }
+      }
+    }
+  ]
+}
