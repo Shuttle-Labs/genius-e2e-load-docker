@@ -26,6 +26,7 @@ cp .env.example .env
 ```
 
 Edit `.env` with your actual values:
+
 ```env
 BASE_URL=https://staging.your-app.com
 SEED_PHRASE="your twelve or twenty four word seed phrase here"
@@ -84,6 +85,7 @@ docker-compose up
 ### Building the Image
 
 The build process:
+
 1. Uses official Playwright image with pre-installed browsers
 2. Installs system dependencies (git, curl)
 3. Clones your repository
@@ -105,9 +107,10 @@ docker run --rm \
   playwright-load-test:latest
 ```
 
-Results will be saved to:
-- `./playwright-results/` - Test results, videos, traces
-- `./playwright-report/` - HTML report
+Results will be saved to timestamped folders (for example `./playwright-results/20231126-150205/`) so each run stays separate:
+
+- `./playwright-results/<timestamp>/` - Test results, videos, traces
+- `./playwright-report/<timestamp>/` - HTML report
 
 ### Running Multiple Instances
 
@@ -160,11 +163,11 @@ CMD ["npx", "playwright", "test", "--headed"]
 # In docker-compose.yml
 services:
   playwright-load-test:
-    shm_size: '4gb'  # Increase if needed
+    shm_size: "4gb" # Increase if needed
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 4G
 ```
 
@@ -173,6 +176,7 @@ services:
 ### Issue: Synpress cache fails to build
 
 **Solution:** The Dockerfile runs `npm run pw:syn:cache` during build. Make sure:
+
 - Your `.env` has valid `SEED_PHRASE` and `METAMASK_PASSWORD`
 - The seed phrase is a valid BIP39 mnemonic
 
@@ -218,6 +222,7 @@ docker run \
 ### For AWS Lambda/EC2 Deployment
 
 1. **Pre-build and push image to ECR:**
+
    ```bash
    docker build -t playwright-load-test:latest .
    docker tag playwright-load-test:latest <ecr-repo>:latest
@@ -225,6 +230,7 @@ docker run \
    ```
 
 2. **Use smaller image (if needed):**
+
    - Consider multi-stage builds
    - Remove unnecessary dependencies
    - Use `.dockerignore` to exclude files
@@ -250,7 +256,7 @@ test.afterEach(async ({}, testInfo) => {
   console.log(`Test: ${testInfo.title}`);
   console.log(`Status: ${testInfo.status}`);
   console.log(`Duration: ${testInfo.duration}ms`);
-  
+
   // Send metrics to CloudWatch, DataDog, etc.
 });
 ```
@@ -283,28 +289,33 @@ After testing locally:
 ## Support
 
 For issues related to:
+
 - Playwright: https://playwright.dev/docs/intro
 - Synpress: https://github.com/Synthetixio/synpress
 - Docker: https://docs.docker.com/
 
-
 docker build --no-cache \
-  --build-arg REPO_URL=https://github.com/Shuttle-Labs/genius-e2e-load-testing.git \
-  --build-arg BRANCH=satyam2 \
-  -f Dockerfile.fixed \
-  -t playwright-load-test:latest \
-  .
+ --build-arg REPO_URL=https://github.com/Shuttle-Labs/genius-e2e-load-testing.git \
+ --build-arg BRANCH=satyam2 \
+ -f Dockerfile.fixed \
+ -t playwright-load-test:latest \
+ .
 
 docker run --rm -it \
-  --shm-size=2g \
-  --env-file .env \
-  --entrypoint /bin/bash \
-  playwright-load-test:latest
+ --shm-size=2g \
+ --env-file .env \
+ --entrypoint /bin/bash \
+ playwright-load-test:latest
 
-  Xvfb :99 -screen 0 1280x960x24 &
+Xvfb :99 -screen 0 1280x960x24 &
 export DISPLAY=:99
 sleep 2
 cd /app/playwright
 npx playwright test --headed --workers=1 --reporter=line
 
 docker builder prune -a -f
+
+#hussain
+
+build: ./docker-run.sh build
+Run: ./docker-run.sh run

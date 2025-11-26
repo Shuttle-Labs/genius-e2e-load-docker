@@ -37,6 +37,7 @@ fi
 build_image() {
     echo -e "${GREEN}Building Docker image...${NC}"
     docker build \
+        --no-cache \
         --build-arg REPO_URL=${REPO_URL} \
         --build-arg BRANCH=${BRANCH} \
         -f ${DOCKERFILE} \
@@ -48,11 +49,19 @@ build_image() {
 # Function to run single instance
 run_single() {
     echo -e "${GREEN}Running single test instance...${NC}"
+    local timestamp
+    timestamp=$(date +"%Y%m%d-%H%M%S")
+    local host_results_dir="$(pwd)/playwright-results/${timestamp}"
+    local host_report_dir="$(pwd)/playwright-report/${timestamp}"
+    mkdir -p "${host_results_dir}" "${host_report_dir}"
+    echo "Artifacts will be saved under:"
+    echo "  Results:     ${host_results_dir}"
+    echo "  HTML report: ${host_report_dir}"
     docker run --rm \
         --shm-size=2g \
         --env-file .env \
-        -v $(pwd)/playwright-results:/app/playwright/test-results \
-        -v $(pwd)/playwright-report:/app/playwright/playwright-report \
+        -v "${host_results_dir}:/app/playwright/test-results" \
+        -v "${host_report_dir}:/app/playwright/playwright-report" \
         ${IMAGE_NAME}:latest
 }
 

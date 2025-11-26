@@ -55,19 +55,12 @@ RUN if [ ! -f playwright/package.json ]; then \
         echo "✓ Created package.json in playwright directory to force ES modules"; \
     fi
 
-# Environment variables (defaults for staging - can be overridden at runtime)
-ENV BASE_URL="https://staging.tradegenius.com"
-ENV SEED_PHRASE="brick jeans notice danger fatigue judge turtle retire miss hold office sauce"
-ENV METAMASK_PASSWORD="Tester@1234"
+# Environment variables are provided at runtime via .env or docker run -e
 
 # Build Synpress cache with the fixed file using xvfb for headless display
 RUN cd playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx synpress test/wallet-setup
 
 RUN echo "✓ Synpress cache built successfully with fixed files"
-
-RUN cd playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24"  npx playwright test --headed --workers 1
-
-RUN echo "✓ Playwright tests ran successfully with fixed files"
 
 # Create entrypoint script
 RUN printf '#!/bin/bash\n\
@@ -78,9 +71,11 @@ echo "Starting Playwright Tests"\n\
 echo "================================="\n\
 echo "BASE_URL: ${BASE_URL}"\n\
 echo ""\n\
+echo "Launching Playwright via xvfb-run (headed, 1 worker)"\n\
+echo "Command: npx playwright test --headed --workers 1 $*"\n\
 \n\
 cd /app/playwright\n\
-exec npx playwright test --headed --workers 1 "$@"\n\
+exec xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test --headed --workers 1 "$@"\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
