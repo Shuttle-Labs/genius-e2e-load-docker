@@ -15,6 +15,12 @@ REPO_URL="https://github.com/Shuttle-Labs/genius-e2e-load-testing.git"
 BRANCH="satyam2"
 IMAGE_NAME="playwright-load-test"
 DOCKERFILE="Dockerfile.fixed"
+PLAYWRIGHT_CMD='set -x; cd /app/playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test --headed --workers 1'
+
+TTY_ARGS=()
+if [ -t 1 ]; then
+    TTY_ARGS=(-it)
+fi
 
 echo -e "${GREEN}=== Playwright Load Testing Docker Setup ===${NC}\n"
 
@@ -57,12 +63,14 @@ run_single() {
     echo "Artifacts will be saved under:"
     echo "  Results:     ${host_results_dir}"
     echo "  HTML report: ${host_report_dir}"
-    docker run --rm \
+    docker run --rm "${TTY_ARGS[@]}" \
         --shm-size=2g \
         --env-file .env \
         -v "${host_results_dir}:/app/playwright/test-results" \
         -v "${host_report_dir}:/app/playwright/playwright-report" \
-        ${IMAGE_NAME}:latest
+        --entrypoint /bin/bash \
+        ${IMAGE_NAME}:latest \
+        -lc "${PLAYWRIGHT_CMD}"
 }
 
 # Function to run using docker-compose
@@ -76,14 +84,15 @@ run_multiple() {
     local instances=$1
     echo -e "${GREEN}Running ${instances} parallel test instances...${NC}"
     
-    for i in $(seq 1 $instances); do
-        echo -e "${YELLOW}Starting instance $i...${NC}"
-        docker run --rm -d \
-            --name playwright-test-$i \
-            --shm-size=2g \
-            --env-file .env \
-            ${IMAGE_NAME}:latest &
-    done
+        for i in $(seq 1 $instances); do
+            echo -e "${YELLOW}Starting instance $i...${NC}"
+            docker run --rm -d \
+                --name playwright-test-$i \
+                --shm-size=2g \
+                --env-file .env \
+                ${IMAGE_NAME}:latest \
+                "${PLAYWRIGHT_CMD[@]}" &
+        done
     
     wait
     echo -e "${GREEN}✓ All instances completed${NC}"
