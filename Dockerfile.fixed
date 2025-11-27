@@ -77,4 +77,4 @@ exec "$@"\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash", "-lc", "xvfb-run --auto-servernum --server-args=\"-screen 0 1280x960x24\" npx playwright test --headed --workers 1"]
+CMD ["/bin/bash", "-lc", "set -ex; cd /app/playwright && xvfb-run --auto-servernum --server-args=\"-screen 0 1280x960x24\" npx playwright test --headed --workers 1"]
