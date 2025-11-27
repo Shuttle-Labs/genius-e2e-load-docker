@@ -11,6 +11,20 @@
       "name": "playwright-load",
       "image": "445914872260.dkr.ecr.us-east-2.amazonaws.com/e2e_load_test:latest",
       "entryPoint": ["npm", "run", "start"],
+      "environment": [
+        {
+          "name": "BASE_URL",
+          "value": "https://staging.tradegenius.com"
+        },
+        {
+          "name": "METAMASK_PASSWORD",
+          "value": "Tester@1234"
+        },
+        {
+          "name": "SEED_PHRASE",
+          "value": "brick jeans notice danger fatigue judge turtle retire miss hold office sauce"
+        }
+      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
