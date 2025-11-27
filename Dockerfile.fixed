@@ -3,25 +3,39 @@ FROM mcr.microsoft.com/playwright:v1.48.2-jammy
 
 WORKDIR /app
 
-# Install system dependencies including xvfb for headless browser
+# Generate a unique container ID at build time and runtime
+ARG BUILD_UUID
+ENV CONTAINER_UUID=${BUILD_UUID}
+
+# Install system dependencies including xvfb for headless browser and uuid generator
 RUN apt-get update && \
     apt-get install -y \
     git \
     curl \
     xvfb \
+    uuid-runtime \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone repository
 ARG REPO_URL
-ARG BRANCH=main
-RUN git clone ${REPO_URL} . && \
-    git checkout ${BRANCH}
+ARG BRANCH=satyam2
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    echo "[${CONTAINER_UUID}] Cloning repository from ${REPO_URL}" && \
+    git clone ${REPO_URL} . && \
+    git checkout ${BRANCH} && \
+    echo "[${CONTAINER_UUID}] ✓ Repository cloned and checked out to branch ${BRANCH}"
 
 # Install npm dependencies
-RUN npm ci
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    echo "[${CONTAINER_UUID}] Installing npm dependencies" && \
+    npm ci && \
+    echo "[${CONTAINER_UUID}] ✓ npm dependencies installed"
 
 # Install Playwright browsers
-RUN cd playwright && npx playwright install --with-deps
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    echo "[${CONTAINER_UUID}] Installing Playwright browsers" && \
+    cd playwright && npx playwright install --with-deps && \
+    echo "[${CONTAINER_UUID}] ✓ Playwright browsers installed"
 
 # Copy the fixed files
 COPY demo.setup.fixed.js /tmp/demo.setup.fixed.js
@@ -29,30 +43,35 @@ COPY wallet.fixtures.fixed.ts /tmp/wallet.fixtures.fixed.ts
 COPY playwright.config.fixed.ts /tmp/playwright.config.fixed.ts
 
 # Replace the problematic demo.setup.js with the fixed version
-RUN cd playwright/test/wallet-setup && \
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    cd playwright/test/wallet-setup && \
     cp demo.setup.js demo.setup.js.backup && \
     cp /tmp/demo.setup.fixed.js demo.setup.js && \
-    echo "✓ Fixed demo.setup.js - converted to ES modules"
+    echo "[${CONTAINER_UUID}] ✓ Fixed demo.setup.js - converted to ES modules"
 
 # Replace the problematic wallet.fixtures.ts with the fixed version
-RUN cd playwright/test/fixtures && \
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    cd playwright/test/fixtures && \
     cp wallet.fixtures.ts wallet.fixtures.ts.backup && \
     cp /tmp/wallet.fixtures.fixed.ts wallet.fixtures.ts && \
-    echo "✓ Fixed wallet.fixtures.ts - converted to ES modules"
+    echo "[${CONTAINER_UUID}] ✓ Fixed wallet.fixtures.ts - converted to ES modules"
 
 # Fix playwright.config.ts for ES modules (__dirname issue)
-RUN cd playwright && \
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    cd playwright && \
     cp playwright.config.ts playwright.config.ts.backup && \
     cp /tmp/playwright.config.fixed.ts playwright.config.ts && \
-    echo "✓ Fixed playwright.config.ts - replaced __dirname with ES module equivalent"
+    echo "[${CONTAINER_UUID}] ✓ Fixed playwright.config.ts - replaced __dirname with ES module equivalent"
 
 # Remove any CommonJS package.json files that might interfere
-RUN find playwright -name "package.json" -type f -exec sh -c 'grep -q "\"type\".*\"commonjs\"" "$1" && rm "$1" && echo "Removed CommonJS package.json: $1"' _ {} \; || true
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    find playwright -name "package.json" -type f -exec sh -c 'grep -q "\"type\".*\"commonjs\"" "$1" && rm "$1" && echo "['"${CONTAINER_UUID}"'] Removed CommonJS package.json: $1"' _ {} \; || true
 
 # Ensure the main playwright directory uses ES modules
-RUN if [ ! -f playwright/package.json ]; then \
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    if [ ! -f playwright/package.json ]; then \
         echo '{"type":"module"}' > playwright/package.json && \
-        echo "✓ Created package.json in playwright directory to force ES modules"; \
+        echo "[${CONTAINER_UUID}] ✓ Created package.json in playwright directory to force ES modules"; \
     fi
 
 # Environment variables (defaults for staging - can be overridden at runtime)
@@ -61,27 +80,75 @@ ENV SEED_PHRASE="brick jeans notice danger fatigue judge turtle retire miss hold
 ENV METAMASK_PASSWORD="Tester@1234"
 
 # Build Synpress cache with the fixed file using xvfb for headless display
-RUN cd playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx synpress test/wallet-setup
+# Using stdbuf to force unbuffered output and tee to log everything
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    echo "[${CONTAINER_UUID}] Building Synpress cache" && \
+    cd playwright && \
+    (xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx synpress test/wallet-setup 2>&1 | \
+    stdbuf -oL -eL awk '{print "['"${CONTAINER_UUID}"'] " $0; fflush()}' | tee /tmp/synpress-build.log) && \
+    echo "[${CONTAINER_UUID}] ✓ Synpress cache built successfully with fixed files"
 
-RUN echo "✓ Synpress cache built successfully with fixed files"
+# Run initial test with full logging
+RUN CONTAINER_UUID=${CONTAINER_UUID:-$(uuidgen)} && \
+    echo "[${CONTAINER_UUID}] Running Playwright tests" && \
+    cd playwright && \
+    (xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test --headed --workers 1 2>&1 | \
+    stdbuf -oL -eL awk '{print "['"${CONTAINER_UUID}"'] " $0; fflush()}' | tee /tmp/playwright-build.log) && \
+    echo "[${CONTAINER_UUID}] ✓ Playwright tests ran successfully with fixed files"
 
-RUN cd playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24"  npx playwright test --headed --workers 1
-
-RUN echo "✓ Playwright tests ran successfully with fixed files"
-
-# Create entrypoint script
+# Create entrypoint script with UUID logging and persistent output
 RUN printf '#!/bin/bash\n\
 set -e\n\
 \n\
-echo "================================="\n\
-echo "Starting Playwright Tests"\n\
-echo "================================="\n\
-echo "BASE_URL: ${BASE_URL}"\n\
-echo ""\n\
+# Generate runtime UUID if not set\n\
+if [ -z "$CONTAINER_UUID" ]; then\n\
+    export CONTAINER_UUID=$(uuidgen)\n\
+fi\n\
+\n\
+# Create log directory\n\
+LOG_DIR="/app/logs"\n\
+mkdir -p ${LOG_DIR}\n\
+LOG_FILE="${LOG_DIR}/test-${CONTAINER_UUID}.log"\n\
+\n\
+# Function to log with UUID prefix\n\
+log() {\n\
+    echo "[${CONTAINER_UUID}] $1" | tee -a ${LOG_FILE}\n\
+}\n\
+\n\
+log "================================="\n\
+log "Starting Playwright Tests"\n\
+log "================================="\n\
+log "BASE_URL: ${BASE_URL}"\n\
+log "Container UUID: ${CONTAINER_UUID}"\n\
+log "Log File: ${LOG_FILE}"\n\
+log ""\n\
 \n\
 cd /app/playwright\n\
-exec npx playwright test --headed --workers 1 "$@"\n\
+\n\
+# Set Playwright environment variables for better logging\n\
+export DEBUG=pw:api\n\
+export PWDEBUG=console\n\
+\n\
+# Run tests with unbuffered output, UUID prefix, and persistent logging\n\
+# Using exec with process substitution to maintain exit code\n\
+set +e\n\
+npx playwright test --headed --workers 1 "$@" 2>&1 | \\\n\
+    stdbuf -oL -eL awk '\''{print "['"${CONTAINER_UUID}"'] " $0; fflush()}'\'' | \\\n\
+    tee -a ${LOG_FILE}\n\
+TEST_EXIT_CODE=${PIPESTATUS[0]}\n\
+set -e\n\
+\n\
+log ""\n\
+log "================================="\n\
+log "Tests completed with exit code: ${TEST_EXIT_CODE}"\n\
+log "Full logs saved to: ${LOG_FILE}"\n\
+log "================================="\n\
+\n\
+exit ${TEST_EXIT_CODE}\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
+
+# Create volume mount point for logs
+RUN mkdir -p /app/logs
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD []

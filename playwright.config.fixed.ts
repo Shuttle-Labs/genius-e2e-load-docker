@@ -16,7 +16,7 @@ export default defineConfig({
   testDir: './test',
   timeout: 280_000,
   expect: { timeout: 30_000 },
-  reporter: [['html', { open: 'never' }], ['list']],
+  reporter: [['html', { open: 'never' }], ['list'], ['line']],
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
     headless: false,
@@ -29,5 +29,6 @@ export default defineConfig({
     },
     viewport: { width: 1280, height: 800 },
   },
+  preserveOutput: 'always',
   projects: [{ name: 'chromium-metamask', use: { ...devices['Desktop Chrome'] } }],
 });

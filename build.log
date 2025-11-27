@@ -1,0 +1,532 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.fixed
+#1 transferring dockerfile: 6.22kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for mcr.microsoft.com/playwright:v1.48.2-jammy
+#2 DONE 0.6s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 607B done
+#3 DONE 0.0s
+
+#4 [ 1/18] FROM mcr.microsoft.com/playwright:v1.48.2-jammy@sha256:96dc479be9a603227fafc7126bd7d5e8152ae3e63749f377b2c49a4314b28ae1
+#4 resolve mcr.microsoft.com/playwright:v1.48.2-jammy@sha256:96dc479be9a603227fafc7126bd7d5e8152ae3e63749f377b2c49a4314b28ae1 done
+#4 DONE 0.0s
+
+#5 [ 2/18] WORKDIR /app
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 168B done
+#6 DONE 0.0s
+
+#7 [ 3/18] RUN apt-get update &&     apt-get install -y     git     curl     xvfb     uuid-runtime     && rm -rf /var/lib/apt/lists/*
+#7 0.743 Get:1 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]
+#7 0.785 Get:2 http://ports.ubuntu.com/ubuntu-ports jammy InRelease [270 kB]
+#7 2.278 Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [128 kB]
+#7 2.619 Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [127 kB]
+#7 3.203 Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [129 kB]
+#7 3.794 Get:6 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 Packages [17.2 MB]
+#7 3.794 Get:7 https://deb.nodesource.com/node_20.x nodistro/main arm64 Packages [13.1 kB]
+#7 6.497 Get:8 http://ports.ubuntu.com/ubuntu-ports jammy/restricted arm64 Packages [24.2 kB]
+#7 6.497 Get:9 http://ports.ubuntu.com/ubuntu-ports jammy/multiverse arm64 Packages [224 kB]
+#7 6.499 Get:10 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 Packages [1758 kB]
+#7 6.549 Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 Packages [3625 kB]
+#7 6.762 Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 Packages [1621 kB]
+#7 6.888 Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 Packages [46.0 kB]
+#7 6.888 Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 Packages [5855 kB]
+#7 7.215 Get:15 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 Packages [83.5 kB]
+#7 7.216 Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 Packages [33.3 kB]
+#7 7.216 Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 Packages [1322 kB]
+#7 7.276 Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 Packages [3298 kB]
+#7 7.479 Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 Packages [39.5 kB]
+#7 7.482 Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 Packages [5643 kB]
+#7 7.932 Fetched 41.5 MB in 8s (5289 kB/s)
+#7 7.932 Reading package lists...
+#7 8.320 Reading package lists...
+#7 8.681 Building dependency tree...
+#7 8.769 Reading state information...
+#7 8.850 The following additional packages will be installed:
+#7 8.850   libcurl4 xserver-common
+#7 8.850 Suggested packages:
+#7 8.850   gettext-base git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui
+#7 8.850   gitk gitweb git-cvs git-mediawiki git-svn
+#7 8.850 Recommended packages:
+#7 8.850   patch less xfonts-base
+#7 8.872 The following NEW packages will be installed:
+#7 8.872   uuid-runtime
+#7 8.872 The following packages will be upgraded:
+#7 8.872   curl git libcurl4 xserver-common xvfb
+#7 9.452 5 upgraded, 1 newly installed, 0 to remove and 99 not upgraded.
+#7 9.452 Need to get 4617 kB of archives.
+#7 9.452 After this operation, 234 kB of additional disk space will be used.
+#7 9.452 Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 uuid-runtime arm64 2.37.2-4ubuntu3.4 [31.8 kB]
+#7 10.27 Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 curl arm64 7.81.0-1ubuntu1.21 [190 kB]
+#7 11.00 Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libcurl4 arm64 7.81.0-1ubuntu1.21 [284 kB]
+#7 11.30 Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 git arm64 1:2.34.1-1ubuntu1.15 [3224 kB]
+#7 11.97 Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 xserver-common all 2:21.1.4-2ubuntu1.7~22.04.16 [29.5 kB]
+#7 11.97 Get:6 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 xvfb arm64 2:21.1.4-2ubuntu1.7~22.04.16 [858 kB]
+#7 12.11 debconf: delaying package configuration, since apt-utils is not installed
+#7 12.12 Fetched 4617 kB in 3s (1463 kB/s)
+#7 12.13 Selecting previously unselected package uuid-runtime.
+#7 12.13 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 34284 files and directories currently installed.)
+#7 12.14 Preparing to unpack .../0-uuid-runtime_2.37.2-4ubuntu3.4_arm64.deb ...
+#7 12.14 Unpacking uuid-runtime (2.37.2-4ubuntu3.4) ...
+#7 12.16 Preparing to unpack .../1-curl_7.81.0-1ubuntu1.21_arm64.deb ...
+#7 12.16 Unpacking curl (7.81.0-1ubuntu1.21) over (7.81.0-1ubuntu1.18) ...
+#7 12.17 Preparing to unpack .../2-libcurl4_7.81.0-1ubuntu1.21_arm64.deb ...
+#7 12.18 Unpacking libcurl4:arm64 (7.81.0-1ubuntu1.21) over (7.81.0-1ubuntu1.18) ...
+#7 12.20 Preparing to unpack .../3-git_1%3a2.34.1-1ubuntu1.15_arm64.deb ...
+#7 12.21 Unpacking git (1:2.34.1-1ubuntu1.15) over (1:2.34.1-1ubuntu1.11) ...
+#7 12.34 Preparing to unpack .../4-xserver-common_2%3a21.1.4-2ubuntu1.7~22.04.16_all.deb ...
+#7 12.34 Unpacking xserver-common (2:21.1.4-2ubuntu1.7~22.04.16) over (2:21.1.4-2ubuntu1.7~22.04.11) ...
+#7 12.35 Preparing to unpack .../5-xvfb_2%3a21.1.4-2ubuntu1.7~22.04.16_arm64.deb ...
+#7 12.36 Unpacking xvfb (2:21.1.4-2ubuntu1.7~22.04.16) over (2:21.1.4-2ubuntu1.7~22.04.11) ...
+#7 12.38 Setting up git (1:2.34.1-1ubuntu1.15) ...
+#7 12.39 Setting up uuid-runtime (2.37.2-4ubuntu3.4) ...
+#7 12.40 Adding group `uuidd' (GID 106) ...
+#7 12.41 Done.
+#7 12.42 Warning: The home dir /run/uuidd you specified can't be accessed: No such file or directory
+#7 12.42 Adding system user `uuidd' (UID 104) ...
+#7 12.42 Adding new user `uuidd' (UID 104) with group `uuidd' ...
+#7 12.43 Not creating home directory `/run/uuidd'.
+#7 12.44 invoke-rc.d: could not determine current runlevel
+#7 12.44 invoke-rc.d: policy-rc.d denied execution of start.
+#7 12.47 Created symlink /etc/systemd/system/sockets.target.wants/uuidd.socket → /lib/systemd/system/uuidd.socket.
+#7 12.51 Setting up libcurl4:arm64 (7.81.0-1ubuntu1.21) ...
+#7 12.51 Setting up curl (7.81.0-1ubuntu1.21) ...
+#7 12.52 Setting up xserver-common (2:21.1.4-2ubuntu1.7~22.04.16) ...
+#7 12.52 Setting up xvfb (2:21.1.4-2ubuntu1.7~22.04.16) ...
+#7 12.53 Processing triggers for libc-bin (2.35-0ubuntu3.8) ...
+#7 DONE 12.6s
+
+#8 [ 4/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Cloning repository from https://github.com/Shuttle-Labs/genius-e2e-load-testing.git" &&     git clone https://github.com/Shuttle-Labs/genius-e2e-load-testing.git . &&     git checkout satyam2 &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Repository cloned and checked out to branch satyam2"
+#8 0.089 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Cloning repository from https://github.com/Shuttle-Labs/genius-e2e-load-testing.git
+#8 0.091 Cloning into '.'...
+#8 2.351 Switched to a new branch 'satyam2'
+#8 2.351 Branch 'satyam2' set up to track remote branch 'satyam2' from 'origin'.
+#8 2.352 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Repository cloned and checked out to branch satyam2
+#8 DONE 2.4s
+
+#9 [ 5/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Installing npm dependencies" &&     npm ci &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ npm dependencies installed"
+#9 0.086 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Installing npm dependencies
+#9 1.226 npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+#9 1.295 npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
+#9 1.968 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+#9 2.152 npm warn deprecated fstream@1.0.12: This package is no longer supported.
+#9 9.026 npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+#9 35.96 
+#9 35.96 added 470 packages, and audited 471 packages in 36s
+#9 35.96 
+#9 35.96 130 packages are looking for funding
+#9 35.96   run `npm fund` for details
+#9 36.02 
+#9 36.02 14 vulnerabilities (3 moderate, 11 high)
+#9 36.02 
+#9 36.02 To address issues that do not require attention, run:
+#9 36.02   npm audit fix
+#9 36.02 
+#9 36.02 To address all issues (including breaking changes), run:
+#9 36.02   npm audit fix --force
+#9 36.02 
+#9 36.02 Run `npm audit` for details.
+#9 36.02 npm notice
+#9 36.02 npm notice New major version of npm available! 10.8.2 -> 11.6.4
+#9 36.02 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.4
+#9 36.02 npm notice To update run: npm install -g npm@11.6.4
+#9 36.02 npm notice
+#9 36.03 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ npm dependencies installed
+#9 DONE 36.2s
+
+#10 [ 6/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Installing Playwright browsers" &&     cd playwright && npx playwright install --with-deps &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Playwright browsers installed"
+#10 0.115 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Installing Playwright browsers
+#10 0.353 Installing dependencies...
+#10 0.963 Get:1 http://ports.ubuntu.com/ubuntu-ports jammy InRelease [270 kB]
+#10 2.301 Get:2 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]
+#10 2.624 Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [128 kB]
+#10 3.089 Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [127 kB]
+#10 3.381 Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [129 kB]
+#10 3.755 Get:6 https://deb.nodesource.com/node_20.x nodistro/main arm64 Packages [13.1 kB]
+#10 3.818 Get:7 http://ports.ubuntu.com/ubuntu-ports jammy/restricted arm64 Packages [24.2 kB]
+#10 3.837 Get:8 http://ports.ubuntu.com/ubuntu-ports jammy/multiverse arm64 Packages [224 kB]
+#10 4.281 Get:9 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 Packages [17.2 MB]
+#10 7.019 Get:10 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 Packages [1758 kB]
+#10 7.194 Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 Packages [5855 kB]
+#10 7.917 Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 Packages [3625 kB]
+#10 8.409 Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 Packages [1621 kB]
+#10 8.851 Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 Packages [46.0 kB]
+#10 8.851 Get:15 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 Packages [33.3 kB]
+#10 8.854 Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 Packages [83.5 kB]
+#10 8.864 Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 Packages [5643 kB]
+#10 9.262 Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 Packages [39.5 kB]
+#10 9.263 Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 Packages [3298 kB]
+#10 9.608 Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 Packages [1322 kB]
+#10 10.53 Fetched 41.5 MB in 10s (4080 kB/s)
+#10 10.53 Reading package lists...
+#10 10.93 Reading package lists...
+#10 11.29 Building dependency tree...
+#10 11.38 Reading state information...
+#10 11.39 fonts-freefont-ttf is already the newest version (20120503-10build1).
+#10 11.39 fonts-liberation is already the newest version (1:1.07.4-11).
+#10 11.39 libasound2 is already the newest version (1.2.6.1-1ubuntu1).
+#10 11.39 libatk-bridge2.0-0 is already the newest version (2.38.0-3).
+#10 11.39 libatk1.0-0 is already the newest version (2.36.0-3build1).
+#10 11.39 libatspi2.0-0 is already the newest version (2.44.0-3).
+#10 11.39 libcairo-gobject2 is already the newest version (1.16.0-5ubuntu2).
+#10 11.39 libcairo2 is already the newest version (1.16.0-5ubuntu2).
+#10 11.39 libdbus-glib-1-2 is already the newest version (0.112-2build1).
+#10 11.39 libegl1 is already the newest version (1.4.0-1).
+#10 11.39 libenchant-2-2 is already the newest version (2.3.2-1ubuntu2).
+#10 11.39 libepoxy0 is already the newest version (1.5.10-1).
+#10 11.39 libevdev2 is already the newest version (1.12.1+dfsg-1).
+#10 11.39 libevent-2.1-7 is already the newest version (2.1.12-stable-1build3).
+#10 11.39 libfontconfig1 is already the newest version (2.13.1-4.2ubuntu5).
+#10 11.39 libgles2 is already the newest version (1.4.0-1).
+#10 11.39 libglx0 is already the newest version (1.4.0-1).
+#10 11.39 libgudev-1.0-0 is already the newest version (1:237-2build1).
+#10 11.39 libhyphen0 is already the newest version (2.8.8-7build2).
+#10 11.39 libicu70 is already the newest version (70.1-2).
+#10 11.39 libjpeg-turbo8 is already the newest version (2.1.2-0ubuntu1).
+#10 11.39 liblcms2-2 is already the newest version (2.12~rc1-2build2).
+#10 11.39 libmanette-0.2-0 is already the newest version (0.2.6-3build1).
+#10 11.39 libopengl0 is already the newest version (1.4.0-1).
+#10 11.39 libopus0 is already the newest version (1.3.1-0.1build2).
+#10 11.39 libpng16-16 is already the newest version (1.6.37-3build5).
+#10 11.39 libproxy1v5 is already the newest version (0.4.17-2).
+#10 11.39 libsecret-1-0 is already the newest version (0.20.5-2).
+#10 11.39 libwoff1 is already the newest version (1.0.2-1build4).
+#10 11.39 libxcb-shm0 is already the newest version (1.14-3ubuntu3).
+#10 11.39 libxcb1 is already the newest version (1.14-3ubuntu3).
+#10 11.39 libxcomposite1 is already the newest version (1:0.4.5-1build2).
+#10 11.39 libxcursor1 is already the newest version (1:1.2.0-2build4).
+#10 11.39 libxdamage1 is already the newest version (1:1.1.5-2build2).
+#10 11.39 libxext6 is already the newest version (2:1.3.4-1build1).
+#10 11.39 libxfixes3 is already the newest version (1:6.0.0-1).
+#10 11.39 libxi6 is already the newest version (2:1.8-1build1).
+#10 11.39 libxkbcommon0 is already the newest version (1.4.0-1).
+#10 11.39 libxrandr2 is already the newest version (2:1.5.2-1build1).
+#10 11.39 libxrender1 is already the newest version (1:0.9.10-1build4).
+#10 11.39 libxtst6 is already the newest version (2:1.2.3-1build4).
+#10 11.39 xfonts-scalable is already the newest version (1:1.0.3-1.2ubuntu1).
+#10 11.39 fonts-ipafont-gothic is already the newest version (00303-21ubuntu1).
+#10 11.39 fonts-tlwg-loma-otf is already the newest version (1:0.7.3-1).
+#10 11.39 fonts-unifont is already the newest version (1:14.0.01-1).
+#10 11.39 fonts-wqy-zenhei is already the newest version (0.9.45-8).
+#10 11.39 libffi7 is already the newest version (3.3-5ubuntu1).
+#10 11.39 libx264-163 is already the newest version (2:0.163.3060+git5db6aa6-2build1).
+#10 11.39 xfonts-cyrillic is already the newest version (1:1.0.5).
+#10 11.39 libdbus-1-3 is already the newest version (1.12.20-2ubuntu4.1).
+#10 11.39 libdrm2 is already the newest version (2.4.113-2~ubuntu0.22.04.1).
+#10 11.39 libgtk-3-0 is already the newest version (3.24.33-1ubuntu2.2).
+#10 11.39 libnotify4 is already the newest version (0.7.9-3ubuntu5.22.04.1).
+#10 11.39 libnspr4 is already the newest version (2:4.35-0ubuntu0.22.04.1).
+#10 11.39 libnss3 is already the newest version (2:3.98-0ubuntu0.22.04.2).
+#10 11.39 libpango-1.0-0 is already the newest version (1.50.6+ds-2ubuntu1).
+#10 11.39 libpangocairo-1.0-0 is already the newest version (1.50.6+ds-2ubuntu1).
+#10 11.39 libwayland-client0 is already the newest version (1.20.0-1ubuntu0.1).
+#10 11.39 libwayland-egl1 is already the newest version (1.20.0-1ubuntu0.1).
+#10 11.39 libwayland-server0 is already the newest version (1.20.0-1ubuntu0.1).
+#10 11.39 libwebpdemux2 is already the newest version (1.2.2-2ubuntu0.22.04.2).
+#10 11.39 libx11-6 is already the newest version (2:1.7.5-1ubuntu0.3).
+#10 11.39 libx11-xcb1 is already the newest version (2:1.7.5-1ubuntu0.3).
+#10 11.39 ffmpeg is already the newest version (7:4.4.2-0ubuntu0.22.04.1).
+#10 11.39 gstreamer1.0-libav is already the newest version (1.20.3-0ubuntu1).
+#10 11.39 gstreamer1.0-plugins-bad is already the newest version (1.20.3-0ubuntu1.1).
+#10 11.39 libsoup-3.0-0 is already the newest version (3.0.7-0ubuntu1).
+#10 11.47 xvfb is already the newest version (2:21.1.4-2ubuntu1.7~22.04.16).
+#10 11.47 The following additional packages will be installed:
+#10 11.47   gcc-12-base libegl-mesa0 libgcc-s1 libgdk-pixbuf2.0-common libgfortran5
+#10 11.47   libgl1-mesa-dri libglapi-mesa libglx-mesa0 libgomp1
+#10 11.47   libgstreamer-plugins-good1.0-0 libstdc++6
+#10 11.47 Suggested packages:
+#10 11.47   gvfs cups-common libvisual-0.4-plugins gstreamer1.0-tools
+#10 11.47 Recommended packages:
+#10 11.47   gstreamer1.0-x libgdk-pixbuf2.0-bin libgl1-amber-dri libglib2.0-data
+#10 11.47   xdg-user-dirs gstreamer1.0-gl
+#10 11.49 The following packages will be upgraded:
+#10 11.49   fonts-noto-color-emoji gcc-12-base gstreamer1.0-plugins-base
+#10 11.49   gstreamer1.0-plugins-good libatomic1 libcups2 libegl-mesa0 libfreetype6
+#10 11.49   libgbm1 libgcc-s1 libgdk-pixbuf-2.0-0 libgdk-pixbuf2.0-common libgfortran5
+#10 11.49   libgl1-mesa-dri libglapi-mesa libglib2.0-0 libglx-mesa0 libgomp1
+#10 11.49   libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0
+#10 11.49   libgstreamer-plugins-good1.0-0 libgstreamer1.0-0 libharfbuzz-icu0
+#10 11.49   libharfbuzz0b libopenjp2-7 libstdc++6 libxml2 libxslt1.1
+#10 12.07 28 upgraded, 0 newly installed, 0 to remove and 71 not upgraded.
+#10 12.07 Need to get 27.9 MB of archives.
+#10 12.07 After this operation, 217 kB of additional disk space will be used.
+#10 12.07 Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libatomic1 arm64 12.3.0-1ubuntu1~22.04.2 [10.8 kB]
+#10 12.61 Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 gcc-12-base arm64 12.3.0-1ubuntu1~22.04.2 [20.6 kB]
+#10 12.62 Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libstdc++6 arm64 12.3.0-1ubuntu1~22.04.2 [661 kB]
+#10 14.70 Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgomp1 arm64 12.3.0-1ubuntu1~22.04.2 [124 kB]
+#10 14.77 Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgfortran5 arm64 12.3.0-1ubuntu1~22.04.2 [417 kB]
+#10 15.00 Get:6 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgcc-s1 arm64 12.3.0-1ubuntu1~22.04.2 [39.7 kB]
+#10 15.01 Get:7 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libglib2.0-0 arm64 2.72.4-0ubuntu2.6 [1435 kB]
+#10 15.30 Get:8 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libxml2 arm64 2.9.13+dfsg-1ubuntu0.10 [728 kB]
+#10 15.39 Get:9 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 fonts-noto-color-emoji all 2.047-0ubuntu0.22.04.1 [10.0 MB]
+#10 16.10 Get:10 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgstreamer1.0-0 arm64 1.20.3-0ubuntu1.1 [930 kB]
+#10 16.15 Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgstreamer-plugins-base1.0-0 arm64 1.20.1-1ubuntu0.5 [793 kB]
+#10 16.20 Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 gstreamer1.0-plugins-base arm64 1.20.1-1ubuntu0.5 [656 kB]
+#10 16.38 Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgdk-pixbuf2.0-common all 2.42.8+dfsg-1ubuntu0.4 [5546 B]
+#10 16.38 Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgdk-pixbuf-2.0-0 arm64 2.42.8+dfsg-1ubuntu0.4 [143 kB]
+#10 16.40 Get:15 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 gstreamer1.0-plugins-good arm64 1.20.3-0ubuntu1.4 [1868 kB]
+#10 16.50 Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgstreamer-plugins-good1.0-0 arm64 1.20.3-0ubuntu1.4 [28.9 kB]
+#10 16.50 Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libcups2 arm64 2.4.1op1-1ubuntu4.12 [267 kB]
+#10 16.51 Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libegl-mesa0 arm64 23.2.1-1ubuntu3.1~22.04.3 [117 kB]
+#10 16.52 Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgbm1 arm64 23.2.1-1ubuntu3.1~22.04.3 [33.7 kB]
+#10 16.52 Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgl1-mesa-dri arm64 23.2.1-1ubuntu3.1~22.04.3 [8091 kB]
+#10 17.01 Get:21 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libglx-mesa0 arm64 23.2.1-1ubuntu3.1~22.04.3 [165 kB]
+#10 17.03 Get:22 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libglapi-mesa arm64 23.2.1-1ubuntu3.1~22.04.3 [52.2 kB]
+#10 17.03 Get:23 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libfreetype6 arm64 2.11.1+dfsg-1ubuntu0.3 [382 kB]
+#10 17.05 Get:24 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgstreamer-gl1.0-0 arm64 1.20.1-1ubuntu0.5 [192 kB]
+#10 17.06 Get:25 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libharfbuzz0b arm64 2.7.4-1ubuntu3.2 [353 kB]
+#10 17.07 Get:26 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libharfbuzz-icu0 arm64 2.7.4-1ubuntu3.2 [5818 B]
+#10 17.07 Get:27 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libxslt1.1 arm64 1.1.34-4ubuntu0.22.04.4 [161 kB]
+#10 17.09 Get:28 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libopenjp2-7 arm64 2.4.0-6ubuntu0.4 [155 kB]
+#10 17.18 debconf: delaying package configuration, since apt-utils is not installed
+#10 17.19 Fetched 27.9 MB in 6s (4977 kB/s)
+#10 17.20 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 34299 files and directories currently installed.)
+#10 17.20 Preparing to unpack .../libatomic1_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+#10 17.21 Unpacking libatomic1:arm64 (12.3.0-1ubuntu1~22.04.2) over (12.3.0-1ubuntu1~22.04) ...
+#10 17.22 Preparing to unpack .../gcc-12-base_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+#10 17.22 Unpacking gcc-12-base:arm64 (12.3.0-1ubuntu1~22.04.2) over (12.3.0-1ubuntu1~22.04) ...
+#10 17.24 Setting up gcc-12-base:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+#10 17.25 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 34299 files and directories currently installed.)
+#10 17.26 Preparing to unpack .../libstdc++6_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+#10 17.26 Unpacking libstdc++6:arm64 (12.3.0-1ubuntu1~22.04.2) over (12.3.0-1ubuntu1~22.04) ...
+#10 17.29 Setting up libstdc++6:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+#10 17.30 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 34299 files and directories currently installed.)
+#10 17.31 Preparing to unpack .../libgomp1_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+#10 17.31 Unpacking libgomp1:arm64 (12.3.0-1ubuntu1~22.04.2) over (12.3.0-1ubuntu1~22.04) ...
+#10 17.33 Preparing to unpack .../libgfortran5_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+#10 17.33 Unpacking libgfortran5:arm64 (12.3.0-1ubuntu1~22.04.2) over (12.3.0-1ubuntu1~22.04) ...
+#10 17.35 Preparing to unpack .../libgcc-s1_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+#10 17.35 Unpacking libgcc-s1:arm64 (12.3.0-1ubuntu1~22.04.2) over (12.3.0-1ubuntu1~22.04) ...
+#10 17.36 Setting up libgcc-s1:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+#10 17.38 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 34299 files and directories currently installed.)
+#10 17.38 Preparing to unpack .../00-libglib2.0-0_2.72.4-0ubuntu2.6_arm64.deb ...
+#10 17.38 Unpacking libglib2.0-0:arm64 (2.72.4-0ubuntu2.6) over (2.72.4-0ubuntu2.3) ...
+#10 17.42 Preparing to unpack .../01-libxml2_2.9.13+dfsg-1ubuntu0.10_arm64.deb ...
+#10 17.42 Unpacking libxml2:arm64 (2.9.13+dfsg-1ubuntu0.10) over (2.9.13+dfsg-1ubuntu0.4) ...
+#10 17.44 Preparing to unpack .../02-fonts-noto-color-emoji_2.047-0ubuntu0.22.04.1_all.deb ...
+#10 17.45 Unpacking fonts-noto-color-emoji (2.047-0ubuntu0.22.04.1) over (2.042-0ubuntu0.22.04.1) ...
+#10 17.50 Preparing to unpack .../03-libgstreamer1.0-0_1.20.3-0ubuntu1.1_arm64.deb ...
+#10 17.50 Unpacking libgstreamer1.0-0:arm64 (1.20.3-0ubuntu1.1) over (1.20.3-0ubuntu1) ...
+#10 17.54 Preparing to unpack .../04-libgstreamer-plugins-base1.0-0_1.20.1-1ubuntu0.5_arm64.deb ...
+#10 17.54 Unpacking libgstreamer-plugins-base1.0-0:arm64 (1.20.1-1ubuntu0.5) over (1.20.1-1ubuntu0.2) ...
+#10 17.57 Preparing to unpack .../05-gstreamer1.0-plugins-base_1.20.1-1ubuntu0.5_arm64.deb ...
+#10 17.58 Unpacking gstreamer1.0-plugins-base:arm64 (1.20.1-1ubuntu0.5) over (1.20.1-1ubuntu0.2) ...
+#10 17.63 Preparing to unpack .../06-libgdk-pixbuf2.0-common_2.42.8+dfsg-1ubuntu0.4_all.deb ...
+#10 17.63 Unpacking libgdk-pixbuf2.0-common (2.42.8+dfsg-1ubuntu0.4) over (2.42.8+dfsg-1ubuntu0.3) ...
+#10 17.65 Preparing to unpack .../07-libgdk-pixbuf-2.0-0_2.42.8+dfsg-1ubuntu0.4_arm64.deb ...
+#10 17.65 Unpacking libgdk-pixbuf-2.0-0:arm64 (2.42.8+dfsg-1ubuntu0.4) over (2.42.8+dfsg-1ubuntu0.3) ...
+#10 17.68 Preparing to unpack .../08-gstreamer1.0-plugins-good_1.20.3-0ubuntu1.4_arm64.deb ...
+#10 17.68 Unpacking gstreamer1.0-plugins-good:arm64 (1.20.3-0ubuntu1.4) over (1.20.3-0ubuntu1.1) ...
+#10 17.77 Preparing to unpack .../09-libgstreamer-plugins-good1.0-0_1.20.3-0ubuntu1.4_arm64.deb ...
+#10 17.77 Unpacking libgstreamer-plugins-good1.0-0:arm64 (1.20.3-0ubuntu1.4) over (1.20.3-0ubuntu1.1) ...
+#10 17.79 Preparing to unpack .../10-libcups2_2.4.1op1-1ubuntu4.12_arm64.deb ...
+#10 17.79 Unpacking libcups2:arm64 (2.4.1op1-1ubuntu4.12) over (2.4.1op1-1ubuntu4.11) ...
+#10 17.81 Preparing to unpack .../11-libegl-mesa0_23.2.1-1ubuntu3.1~22.04.3_arm64.deb ...
+#10 17.81 Unpacking libegl-mesa0:arm64 (23.2.1-1ubuntu3.1~22.04.3) over (23.2.1-1ubuntu3.1~22.04.2) ...
+#10 17.83 Preparing to unpack .../12-libgbm1_23.2.1-1ubuntu3.1~22.04.3_arm64.deb ...
+#10 17.83 Unpacking libgbm1:arm64 (23.2.1-1ubuntu3.1~22.04.3) over (23.2.1-1ubuntu3.1~22.04.2) ...
+#10 17.85 Preparing to unpack .../13-libgl1-mesa-dri_23.2.1-1ubuntu3.1~22.04.3_arm64.deb ...
+#10 17.86 Unpacking libgl1-mesa-dri:arm64 (23.2.1-1ubuntu3.1~22.04.3) over (23.2.1-1ubuntu3.1~22.04.2) ...
+#10 18.56 Preparing to unpack .../14-libglx-mesa0_23.2.1-1ubuntu3.1~22.04.3_arm64.deb ...
+#10 18.57 Unpacking libglx-mesa0:arm64 (23.2.1-1ubuntu3.1~22.04.3) over (23.2.1-1ubuntu3.1~22.04.2) ...
+#10 18.62 Preparing to unpack .../15-libglapi-mesa_23.2.1-1ubuntu3.1~22.04.3_arm64.deb ...
+#10 18.62 Unpacking libglapi-mesa:arm64 (23.2.1-1ubuntu3.1~22.04.3) over (23.2.1-1ubuntu3.1~22.04.2) ...
+#10 18.64 Preparing to unpack .../16-libfreetype6_2.11.1+dfsg-1ubuntu0.3_arm64.deb ...
+#10 18.65 Unpacking libfreetype6:arm64 (2.11.1+dfsg-1ubuntu0.3) over (2.11.1+dfsg-1ubuntu0.2) ...
+#10 18.67 Preparing to unpack .../17-libgstreamer-gl1.0-0_1.20.1-1ubuntu0.5_arm64.deb ...
+#10 18.67 Unpacking libgstreamer-gl1.0-0:arm64 (1.20.1-1ubuntu0.5) over (1.20.1-1ubuntu0.2) ...
+#10 18.69 Preparing to unpack .../18-libharfbuzz0b_2.7.4-1ubuntu3.2_arm64.deb ...
+#10 18.69 Unpacking libharfbuzz0b:arm64 (2.7.4-1ubuntu3.2) over (2.7.4-1ubuntu3.1) ...
+#10 18.71 Preparing to unpack .../19-libharfbuzz-icu0_2.7.4-1ubuntu3.2_arm64.deb ...
+#10 18.71 Unpacking libharfbuzz-icu0:arm64 (2.7.4-1ubuntu3.2) over (2.7.4-1ubuntu3.1) ...
+#10 18.73 Preparing to unpack .../20-libxslt1.1_1.1.34-4ubuntu0.22.04.4_arm64.deb ...
+#10 18.73 Unpacking libxslt1.1:arm64 (1.1.34-4ubuntu0.22.04.4) over (1.1.34-4ubuntu0.22.04.1) ...
+#10 18.75 Preparing to unpack .../21-libopenjp2-7_2.4.0-6ubuntu0.4_arm64.deb ...
+#10 18.76 Unpacking libopenjp2-7:arm64 (2.4.0-6ubuntu0.4) over (2.4.0-6ubuntu0.1) ...
+#10 18.77 Setting up libgbm1:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+#10 18.78 Setting up fonts-noto-color-emoji (2.047-0ubuntu0.22.04.1) ...
+#10 18.78 Setting up libglib2.0-0:arm64 (2.72.4-0ubuntu2.6) ...
+#10 18.80 Setting up libgdk-pixbuf2.0-common (2.42.8+dfsg-1ubuntu0.4) ...
+#10 18.80 Setting up libgomp1:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+#10 18.80 Setting up libfreetype6:arm64 (2.11.1+dfsg-1ubuntu0.3) ...
+#10 18.81 Setting up libatomic1:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+#10 18.81 Setting up libglapi-mesa:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+#10 18.81 Setting up libgfortran5:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+#10 18.82 Setting up libcups2:arm64 (2.4.1op1-1ubuntu4.12) ...
+#10 18.82 Setting up libopenjp2-7:arm64 (2.4.0-6ubuntu0.4) ...
+#10 18.83 Setting up libharfbuzz0b:arm64 (2.7.4-1ubuntu3.2) ...
+#10 18.83 Setting up libgdk-pixbuf-2.0-0:arm64 (2.42.8+dfsg-1ubuntu0.4) ...
+#10 18.84 Setting up libxml2:arm64 (2.9.13+dfsg-1ubuntu0.10) ...
+#10 18.84 Setting up libgstreamer1.0-0:arm64 (1.20.3-0ubuntu1.1) ...
+#10 18.84 Setcap worked! gst-ptp-helper is not suid!
+#10 18.84 Setting up libharfbuzz-icu0:arm64 (2.7.4-1ubuntu3.2) ...
+#10 18.85 Setting up libgl1-mesa-dri:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+#10 18.85 Setting up libgstreamer-plugins-base1.0-0:arm64 (1.20.1-1ubuntu0.5) ...
+#10 18.86 Setting up libgstreamer-plugins-good1.0-0:arm64 (1.20.3-0ubuntu1.4) ...
+#10 18.86 Setting up libegl-mesa0:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+#10 18.86 Setting up libgstreamer-gl1.0-0:arm64 (1.20.1-1ubuntu0.5) ...
+#10 18.87 Setting up gstreamer1.0-plugins-base:arm64 (1.20.1-1ubuntu0.5) ...
+#10 18.87 Setting up libxslt1.1:arm64 (1.1.34-4ubuntu0.22.04.4) ...
+#10 18.87 Setting up libglx-mesa0:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+#10 18.88 Setting up gstreamer1.0-plugins-good:arm64 (1.20.3-0ubuntu1.4) ...
+#10 18.88 Processing triggers for fontconfig (2.13.1-4.2ubuntu5) ...
+#10 18.90 Processing triggers for libc-bin (2.35-0ubuntu3.8) ...
+#10 19.10 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Playwright browsers installed
+#10 DONE 19.2s
+
+#11 [ 7/18] COPY demo.setup.fixed.js /tmp/demo.setup.fixed.js
+#11 DONE 0.0s
+
+#12 [ 8/18] COPY wallet.fixtures.fixed.ts /tmp/wallet.fixtures.fixed.ts
+#12 DONE 0.0s
+
+#13 [ 9/18] COPY playwright.config.fixed.ts /tmp/playwright.config.fixed.ts
+#13 DONE 0.0s
+
+#14 [10/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     cd playwright/test/wallet-setup &&     cp demo.setup.js demo.setup.js.backup &&     cp /tmp/demo.setup.fixed.js demo.setup.js &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Fixed demo.setup.js - converted to ES modules"
+#14 0.089 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Fixed demo.setup.js - converted to ES modules
+#14 DONE 0.1s
+
+#15 [11/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     cd playwright/test/fixtures &&     cp wallet.fixtures.ts wallet.fixtures.ts.backup &&     cp /tmp/wallet.fixtures.fixed.ts wallet.fixtures.ts &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Fixed wallet.fixtures.ts - converted to ES modules"
+#15 0.103 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Fixed wallet.fixtures.ts - converted to ES modules
+#15 DONE 0.1s
+
+#16 [12/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     cd playwright &&     cp playwright.config.ts playwright.config.ts.backup &&     cp /tmp/playwright.config.fixed.ts playwright.config.ts &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Fixed playwright.config.ts - replaced __dirname with ES module equivalent"
+#16 0.126 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Fixed playwright.config.ts - replaced __dirname with ES module equivalent
+#16 DONE 0.1s
+
+#17 [13/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     find playwright -name "package.json" -type f -exec sh -c 'grep -q "\"type\".*\"commonjs\"" "$1" && rm "$1" && echo "['"4A54B356-DDBC-4E7A-892F-53D87B6BF67C"'] Removed CommonJS package.json: $1"' _ {} ; || true
+#17 0.120 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Removed CommonJS package.json: playwright/package.json
+#17 DONE 0.1s
+
+#18 [14/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     if [ ! -f playwright/package.json ]; then         echo '{"type":"module"}' > playwright/package.json &&         echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Created package.json in playwright directory to force ES modules";     fi
+#18 0.121 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Created package.json in playwright directory to force ES modules
+#18 DONE 0.1s
+
+#19 [15/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Building Synpress cache" &&     cd playwright &&     (xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx synpress test/wallet-setup 2>&1 |     stdbuf -oL -eL awk '{print "['"4A54B356-DDBC-4E7A-892F-53D87B6BF67C"'] " $0; fflush()}' | tee /tmp/synpress-build.log) &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Synpress cache built successfully with fixed files"
+#19 0.109 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Building Synpress cache
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ⚠️ The CLI is in alpha so expect breaking changes! ⚠️
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 🚀 Building the cache for wallet setup functions... 🚀
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [DEBUG] Downloading file from https://github.com/MetaMask/metamask-extension/releases/download/v11.9.1/metamask-chrome-11.9.1.zip
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Triggering cache creation for: 532f685e346606c2a803 (demo.setup.{ts,js,mjs})
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Starting with timeout: 10000ms and max retries: 3
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Waiting 1000ms for browser to initialize...
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Looking for extension page (attempt 1/4)...
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Found extension page after 1 polling attempts
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Checking if extension page is properly loaded...
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Checking page state (attempt 1/5)
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] METAMASK app element not found, page appears to be blank
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Page is blank, reloading...
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Checking page state (attempt 2/5)
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Page appears to be loaded correctly
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [WaitForExtensionOnLoadPage] Extension page is properly loaded and ready
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] All wallet setup functions are now cached!
+#19 16.33 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Synpress cache built successfully with fixed files
+#19 DONE 16.4s
+
+#20 [16/18] RUN CONTAINER_UUID=4A54B356-DDBC-4E7A-892F-53D87B6BF67C &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Running Playwright tests" &&     cd playwright &&     (xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test --headed --workers 1 2>&1 |     stdbuf -oL -eL awk '{print "['"4A54B356-DDBC-4E7A-892F-53D87B6BF67C"'] " $0; fflush()}' | tee /tmp/playwright-build.log) &&     echo "[4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Playwright tests ran successfully with fixed files"
+#20 0.093 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Running Playwright tests
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Running 1 test using 1 worker
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Running 1 test using 1 worker
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2K[1/1] [chromium-metamask] › e2e/discover-buy.spec.ts:23:1 › Buy token and Sell - Discover/Holdings page
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Starting Buy and Sell test
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2K[chromium-metamask] › e2e/discover-buy.spec.ts:23:1 › Buy token and Sell - Discover/Holdings page
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Starting Buy and Sell test
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Initialized DiscoverPage
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KInitialized DiscoverPage
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Initialized HoldingsPage
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KInitialized HoldingsPage
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Filled quick buy with token value: 0.01
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KFilled quick buy with token value: 0.01
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Clicked first token, token label: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KClicked first token, token label: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Verified success message after buy
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KVerified success message after buy
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Opened Holdings page
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KOpened Holdings page
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Clicked switch button on Holdings page
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KClicked switch button on Holdings page
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Clicked sell all for token: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KClicked sell all for token: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Verified success message after sell
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KVerified success message after sell
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Opened notifications
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KOpened notifications
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Verified last notification is displayed
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KVerified last notification is displayed
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Opened last notification
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KOpened last notification
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Checked transaction status is success
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KChecked transaction status is success
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Verified last notification contains token: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KVerified last notification contains token: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] Verified transaction token: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2KVerified transaction token: Blownald
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   ✓  1 [chromium-metamask] › e2e/discover-buy.spec.ts:23:1 › Buy token and Sell - Discover/Holdings page (1.1m)
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   Slow test file: [chromium-metamask] › e2e/discover-buy.spec.ts (1.1m)
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   Consider splitting slow test files to speed up parallel execution
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   1 passed (1.1m)
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] [1A[2K  Slow test file: [chromium-metamask] › e2e/discover-buy.spec.ts (1.1m)
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   Consider splitting slow test files to speed up parallel execution
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   1 passed (1.1m)
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] To open last HTML report run:
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C]   npx playwright show-report
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] 
+#20 65.22 [4A54B356-DDBC-4E7A-892F-53D87B6BF67C] ✓ Playwright tests ran successfully with fixed files
+#20 DONE 65.2s
+
+#21 [17/18] RUN printf '#!/bin/bash\nset -e\n\nif [ -z "$CONTAINER_UUID" ]; then\n    export CONTAINER_UUID=$(uuidgen)\nfi\n\nLOG_DIR="/app/logs"\nmkdir -p ${LOG_DIR}\nLOG_FILE="${LOG_DIR}/test-${CONTAINER_UUID}.log"\n\nlog() {\n    echo "[${CONTAINER_UUID}] $1" | tee -a ${LOG_FILE}\n}\n\nlog "================================="\nlog "Starting Playwright Tests"\nlog "================================="\nlog "BASE_URL: ${BASE_URL}"\nlog "Container UUID: ${CONTAINER_UUID}"\nlog "Log File: ${LOG_FILE}"\nlog ""\n\ncd /app/playwright\n\nexport DEBUG=pw:api\nexport PWDEBUG=console\n\nset +e\nnpx playwright test --headed --workers 1 "$@" 2>&1 | \\\n    stdbuf -oL -eL awk '''{print "['"4A54B356-DDBC-4E7A-892F-53D87B6BF67C"'] " $0; fflush()}''' | \\\n    tee -a ${LOG_FILE}\nTEST_EXIT_CODE=${PIPESTATUS[0]}\nset -e\n\nlog ""\nlog "================================="\nlog "Tests completed with exit code: ${TEST_EXIT_CODE}"\nlog "Full logs saved to: ${LOG_FILE}"\nlog "================================="\n\nexit ${TEST_EXIT_CODE}\n' > /entrypoint.sh && chmod +x /entrypoint.sh
+#21 DONE 0.1s
+
+#22 [18/18] RUN mkdir -p /app/logs
+#22 DONE 0.1s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 6.3s done
+#23 exporting manifest sha256:04eff7a6715292424b7059c9852e0f40dcb5866af41d31f2a435313bc49debe5
+#23 exporting manifest sha256:04eff7a6715292424b7059c9852e0f40dcb5866af41d31f2a435313bc49debe5 done
+#23 exporting config sha256:c1a86b6ab895e5d427f4925dcbadbcca940a5a8b1da19819a376308a0638a69a done
+#23 exporting attestation manifest sha256:7332f49a549312e955842580885de4d1bc2408e555b1e691b0b635d143f86ebd done
+#23 exporting manifest list sha256:ed8308d8a922721cf7923b34bbdbc38c3427af11635e323ea13f03c97e19f621 done
+#23 naming to docker.io/library/playwright-load-test:latest done
+#23 unpacking to docker.io/library/playwright-load-test:latest
+#23 unpacking to docker.io/library/playwright-load-test:latest 2.3s done
+#23 DONE 8.7s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/keql87rk1jqkyi7553axspzwk
+
+ [33m1 warning found (use docker --debug to expand):
+[0m - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "METAMASK_PASSWORD") (line 80)
