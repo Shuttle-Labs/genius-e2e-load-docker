@@ -64,15 +64,12 @@ RUN echo "✓ Synpress cache built successfully with fixed files"
 
 # Create entrypoint script that executes provided commands inside /app/playwright
 RUN printf '#!/bin/bash\n\
-set -ex\n\
+set -e\n\
 cd /app/playwright\n\
 if [ $# -eq 0 ]; then\n\
     exec /bin/bash\n\
 fi\n\
 \n\
-echo "================================="\n\
-echo "Executing: $*"\n\
-echo "================================="\n\
 exec "$@"\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 
