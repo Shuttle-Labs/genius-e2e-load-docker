@@ -15,7 +15,6 @@ REPO_URL="https://github.com/Shuttle-Labs/genius-e2e-load-testing.git"
 BRANCH="satyam2"
 IMAGE_NAME="playwright-load-test"
 DOCKERFILE="Dockerfile.fixed"
-PLAYWRIGHT_CMD='set -x; cd /app/playwright && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" npx playwright test --headed --workers 1'
 
 TTY_ARGS=()
 if [ -t 1 ]; then
@@ -82,9 +81,7 @@ run_instances() {
             --env-file .env \
             -v "${host_results_dir}:/app/playwright/test-results" \
             -v "${host_report_dir}:/app/playwright/playwright-report" \
-            --entrypoint /bin/bash \
-            ${IMAGE_NAME}:latest \
-            -lc "${PLAYWRIGHT_CMD}"
+            ${IMAGE_NAME}:latest
     else
         echo "Artifacts root:"
         echo "  Results:     ${results_root}"
@@ -103,9 +100,7 @@ run_instances() {
                 --env-file .env \
                 -v "${inst_results_dir}:/app/playwright/test-results" \
                 -v "${inst_report_dir}:/app/playwright/playwright-report" \
-                --entrypoint /bin/bash \
-                ${IMAGE_NAME}:latest \
-                -lc "${PLAYWRIGHT_CMD}" &
+                ${IMAGE_NAME}:latest &
             pids+=($!)
             sleep 0.5
         done

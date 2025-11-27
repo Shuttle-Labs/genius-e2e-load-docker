@@ -10,7 +10,6 @@
     {
       "name": "playwright-load",
       "image": "445914872260.dkr.ecr.us-east-2.amazonaws.com/e2e_load_test:latest",
-      "entryPoint": ["npm", "run", "start"],
       "environment": [
         {
           "name": "BASE_URL",

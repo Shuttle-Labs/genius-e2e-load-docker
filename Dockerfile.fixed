@@ -64,7 +64,7 @@ RUN echo "✓ Synpress cache built successfully with fixed files"
 
 # Create entrypoint script that executes provided commands inside /app/playwright
 RUN printf '#!/bin/bash\n\
-set -e\n\
+set -ex\n\
 cd /app/playwright\n\
 if [ $# -eq 0 ]; then\n\
     exec /bin/bash\n\
@@ -77,4 +77,4 @@ exec "$@"\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash"]
+CMD ["/bin/bash", "-lc", "xvfb-run --auto-servernum --server-args=\"-screen 0 1280x960x24\" npx playwright test --headed --workers 1"]
