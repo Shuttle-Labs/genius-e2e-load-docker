@@ -2,14 +2,13 @@
 
 # Run multiple ECS Fargate tasks in parallel to execute the load tests.
 # Requires AWS CLI v2 and jq to be installed locally and authenticated.
+# brew install jq
 
 set -euo pipefail
 
 
 COUNT=1
-REPOSITORY_URI="445914872260.dkr.ecr.us-east-2.amazonaws.com/e2e_load_test"
-IMAGE_TAG="latest"
-IMAGE_URI=""
+IMAGE_URI="445914872260.dkr.ecr.us-east-2.amazonaws.com/e2e_load_test:latest" 
 CLUSTER="genius-prod"
 SUBNETS="subnet-0605079c59fba5813,subnet-0a461074aeea16af2,subnet-0597f736277923acb"
 SECURITY_GROUPS="sg-09183189a89890aeb"
@@ -53,9 +52,6 @@ if ! [[ "$COUNT" =~ ^[0-9]+$ ]] || [ "$COUNT" -le 0 ]; then
   exit 1
 fi
 
-if [ -z "$IMAGE_URI" ]; then
-  IMAGE_URI="${DEFAULT_REPOSITORY_URI}:${IMAGE_TAG}"
-fi
 
 for var_name in CLUSTER SUBNETS SECURITY_GROUPS; do
   if [ -z "${!var_name}" ]; then
@@ -126,7 +122,10 @@ if [ -z "$TASK_ARNS" ]; then
 fi
 
 echo "Waiting for tasks to stop..."
-mapfile -t TASK_ARN_ARRAY <<< "$TASK_ARNS"
+TASK_ARN_ARRAY=()
+while IFS= read -r arn; do
+  [ -n "$arn" ] && TASK_ARN_ARRAY+=("$arn")
+done <<< "$TASK_ARNS"
 aws ecs wait tasks-stopped --cluster "$CLUSTER" --tasks "${TASK_ARN_ARRAY[@]}"
 
 echo "Task results:"

@@ -28,9 +28,12 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
+          "mode": "non-blocking",
+          "awslogs-create-group": "true",
           "awslogs-group": "/ecs/e2e-load-test",
+          "max-buffer-size": "25m",
           "awslogs-region": "us-east-2",
-          "awslogs-stream-prefix": "playwright"
+          "awslogs-stream-prefix": "ecs"
         }
       }
     }
