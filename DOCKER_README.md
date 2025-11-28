@@ -22,7 +22,7 @@ This Docker setup allows you to run your Playwright + Synpress tests in containe
 Copy `.env.example` to `.env` and fill in your values:
 
 ```bash
-cp .env.example .env
+cp  .env.example .env
 ```
 
 Edit `.env` with your actual values:
