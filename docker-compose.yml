@@ -7,6 +7,7 @@ services:
       args:
         REPO_URL: https://github.com/Shuttle-Labs/genius-e2e-load-testing.git
         BRANCH: satyam2
+    platform: linux/amd64
     environment:
       - BASE_URL=${BASE_URL}
       - SEED_PHRASE=${SEED_PHRASE}

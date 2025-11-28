@@ -51,6 +51,7 @@ build_image() {
     echo -e "${GREEN}Building Docker image...${NC}"
     docker build \
         --no-cache \
+        --platform=linux/amd64 \
         --build-arg REPO_URL=${REPO_URL} \
         --build-arg BRANCH=${BRANCH} \
         -f ${DOCKERFILE} \

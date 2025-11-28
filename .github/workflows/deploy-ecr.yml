@@ -35,6 +35,8 @@ jobs:
         env:
           IMAGE_URI: ${{ env.ECR_REPOSITORY_URI }}:latest
         run: |
+          echo "Building image from repo: ${E2E_REPO_URL}"
+          echo "Using branch: ${E2E_REPO_BRANCH}"
           docker build --no-cache \
             --platform linux/amd64 \
             --build-arg REPO_URL="${{ env.E2E_REPO_URL }}" \
