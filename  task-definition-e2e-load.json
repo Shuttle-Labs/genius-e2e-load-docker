@@ -2,8 +2,8 @@
   "family": "e2e-load-test",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
-  "cpu": "8192",
-  "memory": "16384",
+  "cpu": "2048",
+  "memory": "4096",
   "taskRoleArn": "arn:aws:iam::445914872260:role/genius_ECSExec_Role",
   "executionRoleArn": "arn:aws:iam::445914872260:role/genius_ECSExec_Role",
   "containerDefinitions": [
