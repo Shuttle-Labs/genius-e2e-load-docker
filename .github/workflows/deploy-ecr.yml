@@ -36,6 +36,7 @@ jobs:
           IMAGE_URI: ${{ env.ECR_REPOSITORY_URI }}:latest
         run: |
           docker build --no-cache \
+            --platform linux/amd64 \
             --build-arg REPO_URL="${{ env.E2E_REPO_URL }}" \
             --build-arg BRANCH="${{ env.E2E_REPO_BRANCH }}" \
             -f Dockerfile.fixed \
