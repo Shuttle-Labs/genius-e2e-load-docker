@@ -14,6 +14,7 @@ SUBNETS="subnet-0605079c59fba5813,subnet-0a461074aeea16af2,subnet-0597f736277923
 SECURITY_GROUPS="sg-09183189a89890aeb"
 TASK_DEF_PATH=" task-definition-e2e-load.json"
 ASSIGN_PUBLIC_IP="ENABLED"
+MAX_TASKS_PER_RUN=10
 
 usage() {
   cat <<'EOF'
@@ -51,6 +52,7 @@ if ! [[ "$COUNT" =~ ^[0-9]+$ ]] || [ "$COUNT" -le 0 ]; then
   echo "Count must be a positive integer." >&2
   exit 1
 fi
+COUNT=$((10#$COUNT))
 
 
 for var_name in CLUSTER SUBNETS SECURITY_GROUPS; do
@@ -86,50 +88,57 @@ fi
 echo "Registered task definition: $TASK_DEF_ARN"
 
 echo "Starting $COUNT task(s) in cluster $CLUSTER..."
-PAYLOAD=$(jq -n \
-  --arg cluster "$CLUSTER" \
-  --arg task "$TASK_DEF_ARN" \
-  --arg subnets "$SUBNETS" \
-  --arg sgs "$SECURITY_GROUPS" \
-  --arg assign "$ASSIGN_PUBLIC_IP" \
-  --argjson count "$COUNT" \
-  '{
-    cluster: $cluster,
-    taskDefinition: $task,
-    launchType: "FARGATE",
-    count: $count,
-    networkConfiguration: {
-      awsvpcConfiguration: {
-        subnets: ($subnets | split(",")),
-        securityGroups: ($sgs | split(",")),
-        assignPublicIp: $assign
+TASK_ARN_ARRAY=()
+REMAINING="$COUNT"
+BATCH_NUMBER=1
+while [ "$REMAINING" -gt 0 ]; do
+  if [ "$REMAINING" -gt "$MAX_TASKS_PER_RUN" ]; then
+    BATCH_COUNT=$MAX_TASKS_PER_RUN
+  else
+    BATCH_COUNT="$REMAINING"
+  fi
+
+  echo "Launching batch $BATCH_NUMBER with $BATCH_COUNT task(s)..."
+  PAYLOAD=$(jq -n \
+    --arg cluster "$CLUSTER" \
+    --arg task "$TASK_DEF_ARN" \
+    --arg subnets "$SUBNETS" \
+    --arg sgs "$SECURITY_GROUPS" \
+    --arg assign "$ASSIGN_PUBLIC_IP" \
+    --argjson count "$BATCH_COUNT" \
+    '{
+      cluster: $cluster,
+      taskDefinition: $task,
+      launchType: "FARGATE",
+      count: $count,
+      networkConfiguration: {
+        awsvpcConfiguration: {
+          subnets: ($subnets | split(",")),
+          securityGroups: ($sgs | split(",")),
+          assignPublicIp: $assign
+        }
       }
-    }
-  }')
+    }')
 
-RUN_OUTPUT=$(aws ecs run-task --cli-input-json "$PAYLOAD")
+  RUN_OUTPUT=$(aws ecs run-task --cli-input-json "$PAYLOAD")
 
-FAILURES=$(echo "$RUN_OUTPUT" | jq '.failures | length')
-if [ "$FAILURES" -gt 0 ]; then
-  echo "Some tasks failed to start:"
-  echo "$RUN_OUTPUT" | jq '.failures'
-fi
+  FAILURES=$(echo "$RUN_OUTPUT" | jq '.failures | length')
+  if [ "$FAILURES" -gt 0 ]; then
+    echo "Some tasks in batch $BATCH_NUMBER failed to start:"
+    echo "$RUN_OUTPUT" | jq '.failures'
+  fi
 
-TASK_ARNS=$(echo "$RUN_OUTPUT" | jq -r '.tasks[].taskArn')
-if [ -z "$TASK_ARNS" ]; then
+  while IFS= read -r arn; do
+    [ -n "$arn" ] && TASK_ARN_ARRAY+=("$arn")
+  done < <(echo "$RUN_OUTPUT" | jq -r '.tasks[].taskArn')
+
+  REMAINING=$(( REMAINING - BATCH_COUNT ))
+  BATCH_NUMBER=$(( BATCH_NUMBER + 1 ))
+done
+
+if [ "${#TASK_ARN_ARRAY[@]}" -eq 0 ]; then
   echo "No tasks started successfully." >&2
   exit 1
 fi
 
-echo "Waiting for tasks to stop..."
-TASK_ARN_ARRAY=()
-while IFS= read -r arn; do
-  [ -n "$arn" ] && TASK_ARN_ARRAY+=("$arn")
-done <<< "$TASK_ARNS"
-aws ecs wait tasks-stopped --cluster "$CLUSTER" --tasks "${TASK_ARN_ARRAY[@]}"
-
-echo "Task results:"
-aws ecs describe-tasks --cluster "$CLUSTER" --tasks "${TASK_ARN_ARRAY[@]}" \
-  | jq -r '.tasks[] | "\(.taskArn) - \(.lastStatus) - containers: " + (.containers[] | "\(.name)=exit(\(.exitCode // "unknown"))" )'
-
-echo "Done. Check CloudWatch Logs group /ecs/e2e-load-test for detailed output."
+echo "Launched ${#TASK_ARN_ARRAY[@]} task(s). Not waiting for completion. Monitor CloudWatch Logs group /ecs/e2e-load-test for progress."
